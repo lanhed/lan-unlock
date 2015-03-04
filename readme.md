@@ -1,4 +1,4 @@
-## lan unlock 
+## nfc unlock 
 
 A simple Arduino to Nodejs serial communction program allowing user to unlock mac or start screensaver with a NFC tag.
 
