@@ -1,8 +1,10 @@
 var applescript = require( 'applescript' ),
-	https = require( 'https' ),
 	fs = require( 'fs' ),
+	serialport = require("serialport"),
 
-	index = fs.readFileSync('index.html' ),
+	SerialPort = serialport.SerialPort,
+	ready = false,
+
 	config = JSON.parse( fs.readFileSync( 'config.json' ));
 
 var options = {
@@ -10,6 +12,55 @@ var options = {
 	cert: fs.readFileSync('local.cert')
 };
 
+// list serial ports. Uncomment the code below if you need to 
+// change default port in config.json
+/*serialport.list(function (err, ports) {
+  ports.forEach(function(port) {
+    console.log(port.comName);
+  });
+});*/
+
+var myPort = new SerialPort(config.nfc.port, {
+	// Note that you need the baud rate to be 115200 because we need to print
+    // out the data and read from the card at the same time!
+   baudRate: 115200,
+   // look for return and newline at the end of each data packet:
+   parser: serialport.parsers.readline("\r\n")
+ });
+
+myPort.on('open', onPortOpen);
+myPort.on('data', onSerialData);
+myPort.on('close', onPortClose);
+myPort.on('error', onSerialError);
+
+function onPortOpen() {
+   console.log('port open. Data rate: ' + myPort.options.baudRate);
+}
+
+function onSerialData(data) {
+	if (ready) {
+		if (config.nfc.ids.contains(data)) {
+			unlock();
+			console.log('welcome patric!')
+		} else {
+			console.log('access denied');
+		}
+	}
+
+	// wait for the Arduino loop
+	if (data === 'done') {
+		ready = true;
+		console.log('ready');
+	}
+}
+
+function onPortClose() {
+   console.log('port closed.');
+}
+ 
+function onSerialError(err) {
+   console.log('Serial port error: ' + err);
+}
 
 var unlockScript =
 	'tell application "System Events"\n\
@@ -37,92 +88,20 @@ var sleepScript =
 		start current screen saver\n\
 	end tell';
 
-function onRequest ( req, res ) {
-	var eventName;
-
-	if ( req.method === 'POST' ) {
-
-		var body = '';
-
-		req.on( 'data', function (data) {
-			body += data;
-			// kill large requests
-			if (body.length > 1e4) {
-				req.connection.destroy();
-			}
-		});
-
-		req.on( 'end', function () {
-			var data = JSON.parse( body );
-
-			if ( config.pin !== data.pin ) {
-				eventName = 'incorrect pin';
-                sendJSON( res, { err: eventName });
-			} else if ( data.unlock ) {
-				unlock( res );
-				eventName = 'unlocked';
-			} else if ( data.sleep ) {
-				sleep( res );
-				eventName = 'put to sleep';
-			}
-
-			logEvent( eventName, req );
-		});
-	} else {
-		serverIndex( res );
-		eventName = 'index loaded';
-
-		logEvent( eventName, req );
-	}
-}
-
-function serverIndex ( res ) {
-	res.writeHead( 200, { 'Content-Type': 'text/html' });
-	res.end( index );
-}
-
-function sendJSON ( res, resp ) {
-	res.writeHead( 200, { 'Content-Type': 'application/json' });
-	res.write( JSON.stringify( resp ) );
-	res.end();
-}
-
-function unlock ( res ) {
+function unlock () {
 	applescript.execString( unlockScript, function( err, rtn ) {
-		var resp = {};
 		if ( err ) {
 			console.error( err );
-			resp.err = err;
-		} else {
-			resp.status = 'unlocked';
-		}
-		sendJSON( res, resp );
+		} 
 	});
 }
 
-function sleep ( res ) {
-	applescript.execString( sleepScript , function( err, rtn ) {
-		var resp = {};
-		if ( err ) {
-			console.error( err );
-			resp.err = err;
-		} else {
-			resp.status = "screensaver activated";
-		}
-		sendJSON( res, resp );
-	});
-
+Array.prototype.contains = function(obj) {
+    var i = this.length;
+    while (i--) {
+        if (this[i] === obj) {
+            return true;
+        }
+    }
+    return false;
 }
-
-function logEvent ( eventName, req ) {
-	var time = new Date().toLocaleTimeString(),
-		ip = req.headers['x-forwarded-for'] ||
-			req.connection.remoteAddress ||
-			req.socket.remoteAddress ||
-			req.connection.socket.remoteAddress,
-		logEntry = [ time, eventName, 'from', ip ].join( ' ' );
-
-	console.log( logEntry );
-}
-
-https.createServer( options, onRequest ).listen( config.port );
