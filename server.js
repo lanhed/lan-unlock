@@ -41,8 +41,8 @@ function onSerialData(data) {
 	if (ready) {
 		if (config.nfc.uids.contains(data)) {
 			unlock();
-			console.log('welcome patric!')
 		} else {
+			// TODO: write to logfile
 			console.log('access denied');
 		}
 	}
@@ -83,15 +83,10 @@ var unlockScript =
 		end tell\n\
 	end tell';
 
-var sleepScript =
-	'tell application "System Events"\n\
-		start current screen saver\n\
-	end tell';
-
 function unlock () {
 	applescript.execString( unlockScript, function( err, rtn ) {
 		if ( err ) {
-			console.error( err );
+			console.error( 'Error',err );
 		} 
 	});
 }
