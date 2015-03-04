@@ -39,7 +39,7 @@ function onPortOpen() {
 
 function onSerialData(data) {
 	if (ready) {
-		if (config.nfc.ids.contains(data)) {
+		if (config.nfc.uids.contains(data)) {
 			unlock();
 			console.log('welcome patric!')
 		} else {
