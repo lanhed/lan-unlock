@@ -1,5 +1,7 @@
 {
   "password": "OSX password",
-  "pin": "1234",
-  "port": 8080
+  "nfc": {
+  	"port":"/dev/cu.usbmodemfa131",
+  	"ids":["your tag ids without whitespace, example: 4b4e1ef13484 (4 or 7 bytes depending on ISO14443A card type)"]
+  }
 }
