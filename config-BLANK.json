@@ -1,5 +1,6 @@
 {
   "password": "OSX password",
+  "logfile":"log/access-denied-BLANK.log",
   "nfc": {
   	"port":"/dev/cu.usbmodemfa131",
   	"uids":["your tag uids without whitespace, example: 4b4e1ef13484 (4 or 7 bytes depending on ISO14443A card type)"]

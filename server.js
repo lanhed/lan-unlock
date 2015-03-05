@@ -1,11 +1,12 @@
-var applescript = require( 'applescript' ),
-	fs = require( 'fs' ),
+var fs = require( 'fs' ),
+	path = require('path'),
 	serialport = require("serialport"),
 
 	SerialPort = serialport.SerialPort,
 	ready = false,
 
-	config = JSON.parse( fs.readFileSync( 'config.json' ));
+	config = JSON.parse( fs.readFileSync( 'config.json' )),
+	unlock = require( './unlockScript' )( config.password );
 
 var options = {
 	key: fs.readFileSync('local.key'),
@@ -40,10 +41,21 @@ function onPortOpen() {
 function onSerialData(data) {
 	if (ready) {
 		if (config.nfc.uids.contains(data)) {
-			unlock();
+			unlock( unlockCallback );
 		} else {
-			// TODO: write to logfile
-			console.log('access denied');
+			var filePath = path.join(__dirname, config.logfile);
+			fs.readFile(filePath,{encoding:"utf8"},function(err,filedata){
+				if(err) {
+					console.log(err);
+				} else {
+					filedata += Date.now() + " access denied, " + data + "\r\n";
+					fs.writeFile(filePath, filedata, function(err) {
+						if(err) {
+							console.log(err);
+						}
+					});
+				}
+			});
 		}
 	}
 
@@ -62,33 +74,12 @@ function onSerialError(err) {
    console.log('Serial port error: ' + err);
 }
 
-var unlockScript =
-	'tell application "System Events"\n\
-		if name of every process contains "ScreenSaverEngine" then \n\
-			tell application "ScreenSaverEngine"\n\
-				quit\n\
-			end tell\n\
-			delay 0.2\n\
- 		else \n\
-		tell application "Terminal"\n\
-			do shell script "caffeinate -u -t 1"\n\
-			end tell\n\
-			delay 0.5\n\
-		end if\n\
-		tell application "System Events" to tell process "loginwindow"\n\
-			tell window "Login Panel"\n\
-				keystroke "' + config.password + '"\n\
-				keystroke return\n\
-			end tell\n\
-		end tell\n\
-	end tell';
+function unlockCallback ( err, rtn ) {
+	var resp = {};
 
-function unlock () {
-	applescript.execString( unlockScript, function( err, rtn ) {
-		if ( err ) {
-			console.error( 'Error',err );
-		} 
-	});
+	if ( err ) {
+		console.error( err );
+	}
 }
 
 Array.prototype.contains = function(obj) {
