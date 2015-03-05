@@ -9,3 +9,7 @@ local.key
 local.cert
 
 log/access-denied.log
+
+log/err.log
+
+log/out.log
