@@ -31,7 +31,7 @@ This application requires your nfc tag uid, you can use the example files in PN5
 5. Run `npm start`
 6. Start the app, by running `start-unlock-deamon.command`
 6. Lock your computer and scan your tag.
-
+ 
 
 Disclaimer: **Use at your own risk!**, I take no responsibility for any harm caused by the use of this software.  
 License: [WTFPL](http://www.wtfpl.net/)
