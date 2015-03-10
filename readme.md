@@ -22,9 +22,6 @@ This application requires your nfc tag uid, you can use the example files in PN5
 + http://arduino.cc/en/Main/Software 
 + https://github.com/elechouse/PN532
 
-###Arduino code
-The folder read_NDEF_id found in the Arduino folder needs to be moved into your Arduino sketch folder
-
 ###Instructions:
 
 1. Open `config-BLANK.json` and change the password to match your OSX password, and save as `config.json`.
