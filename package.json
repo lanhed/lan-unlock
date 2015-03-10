@@ -4,7 +4,7 @@
   "description": "A simple Arduino to Nodejs serial communction program to be used as an authentication system for my nfc/rfid hand inplant to unlock an OS X computer.",
   "main": "server.js",
   "scripts": {
-    "start": "forever -w server.js"
+    "start": "forever -w --minUptime 30000 start -l nfc-unlock.log -a -o log/out.log -e log/err.log server.js"
   },
   "author": "Patric Lanhed",
   "license": "WTFPL",
