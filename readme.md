@@ -7,7 +7,7 @@ Part of the code is forked from https://github.com/suhajdab/lan-unlock
 ###prerequisites
 Nodejs (https://nodejs.org/) and forever package (https://www.npmjs.com/package/forever) needs to be installed to run current setup. Note the global flag -g when installing forever.
 
-[Serial communication enabled Arduino](http://arduino.cc/en/Main/Products)
+[Serial communication enabled Arduino](http://arduino.cc/en/Main/Products) 
 [PN532 NFC RFID module](http://www.elechouse.com/elechouse/index.php?main_page=product_info&cPath=90_93&products_id=2242)
 
 This application requires your nfc tag uid, you can use the example files in PN532 to find out the id. The tag uid will then be displayed in HEX values: 0x84 0x48 0x12 0xFF 0x2B 0xE1. This would translate to a string in this program: 844812ff2be1 saved in the config.json, to be matched with your tag uid.
@@ -31,7 +31,7 @@ This application requires your nfc tag uid, you can use the example files in PN5
 5. Run `npm start`
 6. Start the app, by running `start-unlock-deamon.command`
 6. Lock your computer and scan your tag.
- 
+ 	
 
 Disclaimer: **Use at your own risk!**, I take no responsibility for any harm caused by the use of this software.  
 License: [WTFPL](http://www.wtfpl.net/)
