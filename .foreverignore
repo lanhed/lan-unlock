@@ -1,5 +1,28 @@
 **/.idea/**
 **/.git/**
+**/.log/**
+**/*.log
+.log/**
+node_modules/**/*.js
+*.bak
+.DS_Store
+Makefile
+Gruntfile.js
+*.styl
+*.css
+*.gif
+*.png
+*.jpg
+*.min.js
+*.jade
+*.yaml
+*.xml
+*.md
+**.statictmp/**
+**static/**/*.js
+templates/**
+var/*
+*.rdb
 
 # Restart only when js files are changed.
 #!*.js
