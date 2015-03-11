@@ -13,6 +13,8 @@ NFC Module [PN532 NFC RFID module](http://www.elechouse.com/elechouse/index.php?
 
 This application requires your nfc tag uid, you can use the example files in PN532 to find out the id. The tag uid will then be displayed in HEX values: 0x84 0x48 0x12 0xFF 0x2B 0xE1. This would translate to a string in this program: 844812ff2be1 saved in the config.json, to be matched with your tag uid.
 
+To use this application without changing much, you'll need to set `Display login window as` to `List of users`. It will only function in sleep mode, not logged off.
+
 ###Hardware
 + http://arduino.cc/en/Main/ArduinoBoardUno 
 + https://dangerousthings.com/shop/xnt-ntag216-2x12mm-glass-tag/ 
