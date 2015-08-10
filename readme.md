@@ -28,6 +28,7 @@ To use this application without changing much, you'll need to set `Display login
 ###Instructions:
 
 1. Open `config-BLANK.json` and change the password to match your OSX password. Also add your tag uid to the list of uids and save as `config.json`.
+2. Add the current port to `nfc.port` (List ports in terminal with `ls -l /dev/*.usbmodem*`)
 3. Generate ssl certificates ( ex: [http://www.selfsignedcertificate.com](http://www.selfsignedcertificate.com) ) and place `local.cert` & `local.key` in root folder.
 4. Plug in your Arduino connected PN532 NFC RFID module to your computer and upload the Arduino sketch
 
@@ -49,6 +50,7 @@ Disclaimer: **Use at your own risk!**, I take no responsibility for any harm cau
 License: [WTFPL](http://www.wtfpl.net/)
 
 ##TODO
-1. Make the application work even if you're not logged in.
-2. Make a menubar app to display application status, show denied users, start/stop the deamon.
-3. Installation script
+1. Make the app auto discover port
+2. Make the application work even if you're not logged in.
+3. Make a menubar app to display application status, show denied users, start/stop the deamon.
+4. Installation script
