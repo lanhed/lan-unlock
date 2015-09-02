@@ -29,6 +29,7 @@ To use this application without changing much, you'll need to set `Display login
 
 1. Open `config-BLANK.json` and change the password to match your OSX password. Also add your tag uid to the list of uids and save as `config.json`.
 2. Add the current port to `nfc.port` (List ports in terminal with `ls -l /dev/*.usbmodem*`)
+2 1/2. I've saved a nifty little script at https://gist.github.com/lanhed/dcb652c83f032fea31c9 that potentially could make the port selection automaticly. I just haven't had the time to implement it. But you could :)
 3. Generate ssl certificates ( ex: [http://www.selfsignedcertificate.com](http://www.selfsignedcertificate.com) ) and place `local.cert` & `local.key` in root folder.
 4. Plug in your Arduino connected PN532 NFC RFID module to your computer and upload the Arduino sketch
 
